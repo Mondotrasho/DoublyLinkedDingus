@@ -52,8 +52,8 @@ template<class TYPE>
 DllTemplate<TYPE>::DllTemplate()
 {
 	Count = 0;
-	First = NULL;
-	Last = NULL;
+	First = nullptr;
+	Last = nullptr;
 }
 
 template<class TYPE>
@@ -82,7 +82,7 @@ void DllTemplate<TYPE>::insertbefore(Node<TYPE>* beforeThis, TYPE value)
 	Node<TYPE>* New = new Node<TYPE>(value);
 	New->SetNext(beforeThis);
 	//	if node.prev == null
-	if (beforeThis->GetPrev() == NULL) {
+	if (beforeThis->GetPrev() == nullptr) {
 		New->SetPrev(New);
 		this->SetFirst(New);
 		//		newNode.prev : = null-- (not always necessary)
