@@ -23,9 +23,8 @@ public:
 	void insertEnd(TYPE value);
 	Node<TYPE>* find(TYPE value);
 
-	void popFront(); // – remove the first item​
-
-	void popBack(); // – remove the last item​
+	TYPE popFront(); // – remove the first item​ return value
+	TYPE popBack(); // – remove the last item​ return value
 
 	void erase(Node<TYPE>); // – remove the node from the list​
 
@@ -192,14 +191,28 @@ Node<TYPE>* DllTemplate<TYPE>::find(TYPE value)
 }
 
 template <class TYPE>
-void DllTemplate<TYPE>::popFront()
+TYPE DllTemplate<TYPE>::popFront()
 {
-	assert(nullptr);
+	TYPE Temp = this->GetFirst()->GetValue();
+	auto Newfirst = this->GetFirst()->GetNext();
+	this->GetFirst()->GetNext()->SetPrev(nullptr);
+	delete GetFirst();
+	this->SetFirst(Newfirst);
+	return Temp;
+	//assert(nullptr);
 }
 
 template <class TYPE>
-void DllTemplate<TYPE>::popBack()
+TYPE DllTemplate<TYPE>::popBack()
 {
+	TYPE Temp = this->GetLast()->GetValue();
+	auto Newlast = this->GetLast()->GetPrev();
+	this->GetLast()->GetPrev()->SetNext(nullptr);
+	delete GetLast();
+	this->SetLast(Newlast);
+	return Temp;
+	//assert(nullptr);
+
 	assert(nullptr);
 }
 
