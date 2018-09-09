@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Node.h"
 #include <cstddef>
+#include <cassert>
 
 template<class TYPE>
 class DllTemplate
@@ -14,7 +15,6 @@ public:
 	~DllTemplate();
 
 	void pushFront(TYPE value); // – add the value to the beginning of the list​
-
 	void pushBack(TYPE value); // – add the value to the end of the list​
 
 	void insertbefore(Node<TYPE>*, TYPE value); // – insert a value before the node parameter​
@@ -80,20 +80,22 @@ template <class TYPE>
 void DllTemplate<TYPE>::insertbefore(Node<TYPE>* beforeThis, TYPE value)
 {
 	//newNode.next  : = node
-	Node<TYPE> New = Node<TYPE>(value);
-	New.SetNext(&beforeThis);
+	Node<TYPE>* New = new Node<TYPE>(value);
+	New->SetNext(beforeThis);
 	//	if node.prev == null
-	if (beforeThis->GetNext() == NULL) {
-		New.SetPrev(nullptr);
-		this->SetFirst(&New);
+	if (beforeThis->GetPrev() == NULL) {
+		New->SetPrev(New);
+		this->SetFirst(New);
 		//		newNode.prev : = null-- (not always necessary)
 		//		DllTemplate.firstNode : = newNode
 	}
 	//	else
+	else
 	{
-		New.SetPrev(beforeThis->GetPrev());
-		beforeThis->GetPrev()->SetNext(&New);
-		beforeThis->SetPrev(&New);
+		New->SetPrev(beforeThis->GetPrev());
+		beforeThis->GetPrev()->SetNext(New);
+		beforeThis->SetPrev(New);
+		New->SetNext(beforeThis);
 		//		newNode.prev : = node.prev
 		//		node.prev.next : = newNode
 		//		node.prev : = newNode
@@ -106,20 +108,24 @@ template <class TYPE>
 void DllTemplate<TYPE>::insertafter(Node<TYPE>* afterThis, TYPE value)
 {
 	//newNode.prev  : = node
-	Node<TYPE> New = Node<TYPE>(value);
-	New.SetPrev(&afterThis);
+	Node<TYPE>* New = new Node<TYPE>(value);
+	
+	New->SetPrev(afterThis);
 	//	if node.next == null
-	if (afterThis->GetNext() == NULL) {
-		New.SetNext(nullptr);
-		this->SetLast(&New);
+	if (afterThis->GetNext() == nullptr) {
+		New->SetNext(nullptr);
+		afterThis->SetNext(New);
+		this->SetLast(New);
 		//		newNode.next : = null-- (not always necessary)
 		//		DllTemplate.lastNode : = newNode
 	}
 	//	else
+	else
 	{
-		New.SetNext(afterThis->GetNext());
-		afterThis->GetNext()->SetPrev(&New);
-		afterThis->SetNext(&New);
+		New->SetNext(afterThis->GetNext());
+		afterThis->GetNext()->SetPrev(New);
+		afterThis->SetNext(New);
+		New->SetPrev(afterThis);
 		//		newNode.next : = node.next
 		//		node.next.prev : = newNode
 		//		node.next : = newNode
@@ -129,14 +135,14 @@ void DllTemplate<TYPE>::insertafter(Node<TYPE>* afterThis, TYPE value)
 template <class TYPE>
 void DllTemplate<TYPE>::insertbeginning(TYPE value)
 {
-	Node<TYPE> New = Node<TYPE>(value);
+	Node<TYPE>* New = new Node<TYPE>(value);
 	//if DllTemplate.firstNode == null
 	if (this->GetFirst() == nullptr)
 	{
-		this->SetFirst(&New);
-		this->SetLast(&New);
-		New.SetPrev(nullptr);
-		New.SetNext(nullptr);
+		this->SetFirst(New);
+		this->SetLast(New);
+		New->SetPrev(nullptr);
+		New->SetNext(nullptr);
 		//	DllTemplate.firstNode  : = newNode
 		//	DllTemplate.lastNode : = newNode
 		//	newNode.prev : = null
