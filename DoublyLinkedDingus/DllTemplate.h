@@ -13,6 +13,8 @@ private:
 public:
 	DllTemplate();
 	~DllTemplate();
+	DllTemplate<TYPE>(const DllTemplate<TYPE>& otherList);
+	DllTemplate<TYPE> operator=(const DllTemplate<TYPE>*& otherList);
 
 	void pushFront(TYPE value); // – add the value to the beginning of the list​
 	void pushBack(TYPE value); // – add the value to the end of the list​
@@ -30,11 +32,15 @@ public:
 
 	void remove(TYPE value); // – erases all nodes where the value is equal​
 
-							 //Common methods for accessing and iterating through nodes are
+
+	//Common methods for accessing and iterating through nodes are
 	TYPE& first() { return First->GetValue(); } //returns the value of the first
 	TYPE& last() { return Last->GetValue(); } // –  and last node
 	Node<TYPE>* begin() { return First; } // – returns a Node or an iterator to the first node​
 	Node<TYPE>* end() { return nullptr; } // – returns a Node of null or an iterator to 1 passed the last ite
+	Node<TYPE>* begin() const { return First; }
+	Node<TYPE>* end() const { return nullptr; }
+	
 	void SetLast(Node<TYPE>* NewLast) { Last = NewLast; }
 	void SetFirst(Node<TYPE>* NewFirst) { First = NewFirst; }
 	Node<TYPE>*& GetFirst() { return First; }
@@ -48,6 +54,7 @@ public:
 
 	void sort();
 	int Move(int n);
+	void Print();
 };
 
 
@@ -67,7 +74,17 @@ DllTemplate<TYPE>::~DllTemplate()
 	delete Last;
 }
 
-
+template <class TYPE>
+DllTemplate<TYPE>::DllTemplate(const DllTemplate<TYPE>& otherList)
+{
+	otherList = new DllTemplate<TYPE>;
+	while (otherList.GetFirst()->GetNext() != nullptr)
+	{
+		Node<TYPE>* curr = otherList.GetFirst()->GetNext();
+		insertEnd(curr->GetValue());
+		otherList.GetFirst()->SetNext(curr->GetNext());
+	}
+}
 //todo make inserts use the correct First and Last member varaibles
 template <class TYPE>
 void DllTemplate<TYPE>::insertbefore(Node<TYPE>* beforeThis, TYPE value)
@@ -258,6 +275,23 @@ void DllTemplate<TYPE>::remove(TYPE value)
 		//			node.next.prev : = node.prev
 	}
 }
+
+template <class TYPE>
+DllTemplate<TYPE> DllTemplate<TYPE>::operator=(const DllTemplate<TYPE>*& otherList)
+{
+	if (this == &otherList)
+		return *this;
+
+	while (otherList->GetFirst()->GetNext() != nullptr)
+	{
+		Node<TYPE>* curr = otherList->GetFirst()->GetNext();
+		insertEnd(curr->GetValue());
+		otherList->GetFirst()->SetNext(curr->GetNext());
+	}
+
+	return *this;
+}
+
 template <class TYPE>
 void DllTemplate<TYPE>::pushFront(TYPE value)
 {
@@ -299,6 +333,21 @@ int DllTemplate<TYPE>::Move(int n)
 {
 	assert(nullptr);
 }
+template <class TYPE>
+void DllTemplate<TYPE>::Print()
+{
+	if (empty()){return;}
+	Node<TYPE>* node = this->GetFirst();
+	while (node != nullptr) {
+		std::cout << node->GetValue() <<" " ;
+		node = node->GetNext();
+	
+	}
+	std::cout << std::endl;
+	return;
+	assert(nullptr);
+}
+
 
 //Move the current pointer either backwards or
 //forwards n positions from the current position.Move 
