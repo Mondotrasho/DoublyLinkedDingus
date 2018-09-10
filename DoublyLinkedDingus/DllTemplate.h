@@ -43,7 +43,7 @@ public:
 	Node<TYPE>* GetLast() const { return Last; }
 
 	int GetCount() const { return Count; }
-	bool empty() { return Count <= 0; }
+	bool empty() { return First == nullptr; }
 	void clear();
 
 	void sort();
@@ -228,6 +228,7 @@ TYPE DllTemplate<TYPE>::popBack()
 template <class TYPE>
 void DllTemplate<TYPE>::remove(TYPE value)
 {
+	if (empty()) { return; }
 	//todo replace remove with find by value return pointer DONE I THINK
 	//function remove(DLLTemplate DllTemplate, Node node)
 	Node<TYPE>* Remove = this->find(value);//Node<TYPE>(value);
@@ -253,7 +254,7 @@ void DllTemplate<TYPE>::remove(TYPE value)
 	//		else
 	else
 	{
-		Remove->GetNext()->SetNext(Remove->GetPrev());
+		Remove->GetNext()->SetPrev(Remove->GetPrev());
 		//			node.next.prev : = node.prev
 	}
 }
@@ -271,13 +272,17 @@ void DllTemplate<TYPE>::pushBack(TYPE value)
 template <class TYPE>
 void DllTemplate<TYPE>::erase(Node<TYPE>* node)
 {
-	this.remove(node->GetValue());
-	assert(nullptr);
+	if (empty()) { return; }
+	while(this->find(node->GetValue()) != nullptr)
+	{
+		this->remove(node->GetValue());
+	}
 }
 
 template <class TYPE>
 void DllTemplate<TYPE>::clear()
 {
+	if (empty()) { return; }
 	while (this->GetFirst() != nullptr)
 	{
 		popFront();
