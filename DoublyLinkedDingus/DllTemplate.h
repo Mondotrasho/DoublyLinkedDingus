@@ -26,7 +26,7 @@ public:
 	TYPE popFront(); // – remove the first item​ return value
 	TYPE popBack(); // – remove the last item​ return value
 
-	void erase(Node<TYPE>); // – remove the node from the list​
+	void erase(Node<TYPE>*); // – remove the node from the list​
 
 	void remove(TYPE value); // – erases all nodes where the value is equal​
 
@@ -42,8 +42,12 @@ public:
 	Node<TYPE>* GetFirst() const { return First; }
 	Node<TYPE>* GetLast() const { return Last; }
 
+	int GetCount() const { return Count; }
+	bool empty() { return Count <= 0; }
+	void clear();
 
 	void sort();
+	int Move(int n);
 };
 
 
@@ -63,17 +67,7 @@ DllTemplate<TYPE>::~DllTemplate()
 	delete Last;
 }
 
-template <class TYPE>
-void DllTemplate<TYPE>::pushFront(TYPE value)
-{
-	this->insertbeginning(value);
-}
 
-template <class TYPE>
-void DllTemplate<TYPE>::pushBack(TYPE value)
-{
-	this->insertEnd(value);
-}
 //todo make inserts use the correct First and Last member varaibles
 template <class TYPE>
 void DllTemplate<TYPE>::insertbefore(Node<TYPE>* beforeThis, TYPE value)
@@ -83,6 +77,7 @@ void DllTemplate<TYPE>::insertbefore(Node<TYPE>* beforeThis, TYPE value)
 	New->SetNext(beforeThis);
 	//	if node.prev == null
 	if (beforeThis->GetPrev() == nullptr) {
+		Count += 1;
 		New->SetPrev(New);
 		this->SetFirst(New);
 		//		newNode.prev : = null-- (not always necessary)
@@ -91,6 +86,7 @@ void DllTemplate<TYPE>::insertbefore(Node<TYPE>* beforeThis, TYPE value)
 	//	else
 	else
 	{
+		Count += 1;
 		New->SetPrev(beforeThis->GetPrev());
 		beforeThis->GetPrev()->SetNext(New);
 		beforeThis->SetPrev(New);
@@ -112,6 +108,7 @@ void DllTemplate<TYPE>::insertafter(Node<TYPE>* afterThis, TYPE value)
 	New->SetPrev(afterThis);
 	//	if node.next == null
 	if (afterThis->GetNext() == nullptr) {
+		Count += 1;
 		New->SetNext(nullptr);
 		afterThis->SetNext(New);
 		this->SetLast(New);
@@ -121,6 +118,7 @@ void DllTemplate<TYPE>::insertafter(Node<TYPE>* afterThis, TYPE value)
 	//	else
 	else
 	{
+		Count += 1;
 		New->SetNext(afterThis->GetNext());
 		afterThis->GetNext()->SetPrev(New);
 		afterThis->SetNext(New);
@@ -138,6 +136,7 @@ void DllTemplate<TYPE>::insertbeginning(TYPE value)
 	//if DllTemplate.firstNode == null
 	if (this->GetFirst() == nullptr)
 	{
+		Count += 1;
 		this->SetFirst(New);
 		this->SetLast(New);
 		New->SetPrev(nullptr);
@@ -195,11 +194,17 @@ TYPE DllTemplate<TYPE>::popFront()
 {
 	TYPE Temp = this->GetFirst()->GetValue();
 	auto Newfirst = this->GetFirst()->GetNext();
-	this->GetFirst()->GetNext()->SetPrev(nullptr);
+	if (this->GetFirst()->GetNext() != nullptr) {
+		this->GetFirst()->GetNext()->SetPrev(nullptr);
+	}
 	delete GetFirst();
 	this->SetFirst(Newfirst);
+	Count -= 1;
+	if (GetFirst() == nullptr)
+	{
+		SetLast(nullptr);
+	}
 	return Temp;
-	//assert(nullptr);
 }
 
 template <class TYPE>
@@ -207,19 +212,17 @@ TYPE DllTemplate<TYPE>::popBack()
 {
 	TYPE Temp = this->GetLast()->GetValue();
 	auto Newlast = this->GetLast()->GetPrev();
-	this->GetLast()->GetPrev()->SetNext(nullptr);
+	if (this->GetFirst()->GetPrev() != nullptr) {
+		this->GetLast()->GetPrev()->SetNext(nullptr);
+	}
 	delete GetLast();
 	this->SetLast(Newlast);
+	Count -= 1;
+	if (GetLast() == nullptr)
+	{
+		SetFirst(nullptr);
+	}
 	return Temp;
-	//assert(nullptr);
-
-	assert(nullptr);
-}
-
-template <class TYPE>
-void DllTemplate<TYPE>::erase(Node<TYPE>)
-{
-	assert(nullptr);
 }
 
 template <class TYPE>
@@ -254,9 +257,50 @@ void DllTemplate<TYPE>::remove(TYPE value)
 		//			node.next.prev : = node.prev
 	}
 }
+template <class TYPE>
+void DllTemplate<TYPE>::pushFront(TYPE value)
+{
+	this->insertbeginning(value);
+}
+
+template <class TYPE>
+void DllTemplate<TYPE>::pushBack(TYPE value)
+{
+	this->insertEnd(value);
+}
+template <class TYPE>
+void DllTemplate<TYPE>::erase(Node<TYPE>* node)
+{
+	this.remove(node->GetValue());
+	assert(nullptr);
+}
+
+template <class TYPE>
+void DllTemplate<TYPE>::clear()
+{
+	while (this->GetFirst() != nullptr)
+	{
+		popFront();
+	}
+}
 
 template <class TYPE>
 void DllTemplate<TYPE>::sort()
 {
+	assert(nullptr);
+}
+template <class TYPE>
+int DllTemplate<TYPE>::Move(int n)
+{
+	assert(nullptr);
 }
 
+//Move the current pointer either backwards or
+//forwards n positions from the current position.Move 
+//forwards in n is positive, and move backwards if n 
+//is negative.If current reaches either end of the list 
+//before it has moved n positions, it stops at the end 
+//node.
+//If the movement stops with current at either the first or last node, 
+//return a value of 1; otherwise, 
+//return a value of 0.
