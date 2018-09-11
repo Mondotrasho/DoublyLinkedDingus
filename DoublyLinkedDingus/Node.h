@@ -40,4 +40,9 @@ Node<TYPE>::Node(TYPE value)
 	m_prev = nullptr;
 }
 template<class TYPE>
-Node<TYPE>::~Node() = default;
+Node<TYPE>::~Node()
+{
+	if (m_next != nullptr)delete m_next;
+	if (m_prev != nullptr)delete m_prev;
+
+}

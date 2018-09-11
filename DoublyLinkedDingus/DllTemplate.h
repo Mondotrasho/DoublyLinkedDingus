@@ -15,7 +15,7 @@ public:
 	~DllTemplate();
 	DllTemplate(const DllTemplate<TYPE>& otherList);
 	//DllTemplate<TYPE>(const DllTemplate<TYPE>& otherList);
-	DllTemplate<TYPE> operator=(const DllTemplate<TYPE>* otherList);
+	DllTemplate<TYPE>& operator=(const DllTemplate<TYPE>& otherList);
 
 	void pushFront(TYPE value); // – add the value to the beginning of the list​
 	void pushBack(TYPE value); // – add the value to the end of the list​
@@ -34,14 +34,14 @@ public:
 	void remove(TYPE value); // – erases all nodes where the value is equal​
 
 
-	//Common methods for accessing and iterating through nodes are
+							 //Common methods for accessing and iterating through nodes are
 	TYPE& first() { return First->GetValue(); } //returns the value of the first
 	TYPE& last() { return Last->GetValue(); } // –  and last node
 	Node<TYPE>* begin() { return First; } // – returns a Node or an iterator to the first node​
 	Node<TYPE>* end() { return nullptr; } // – returns a Node of null or an iterator to 1 passed the last ite
 	Node<TYPE>* begin() const { return First; }
 	Node<TYPE>* end() const { return nullptr; }
-	
+
 	void SetLast(Node<TYPE>* NewLast) { Last = NewLast; }
 	void SetFirst(Node<TYPE>* NewFirst) { First = NewFirst; }
 	Node<TYPE>*& GetFirst() { return First; }
@@ -75,23 +75,30 @@ DllTemplate<TYPE>::~DllTemplate()
 	{
 		delete First;
 	}//check its not empty or 1 size
-	
-	
-	if (First == nullptr){return;}
-	auto a = First->GetNext();
-	auto b = a;
-	while (a != nullptr) {
-		//store next
-		b = a->GetNext();
-		//delete current
-		delete a;
-		//current set to next
-		a = b;
+
+
+	if (First != nullptr) {
+		if (First->GetNext() != nullptr) {
+			auto a = First;//->GetNext();
+			auto b = a;
+			if (a->GetNext() != nullptr) {
+				while (a->GetNext() != nullptr) {
+					//store next
+					b = a->GetNext();
+					//delete current
+					if (a != nullptr)delete a;
+					//current set to next
+					if (a != nullptr)a = b;
+				}
+				if (b != nullptr) { delete b; }
+			}
+		}
 	}
 	std::cout << " destructor " << std::endl;
+
 	Print();
-	if(First != nullptr)delete First;
-	
+	if (First != nullptr)delete First;
+
 }
 
 template <class TYPE>
@@ -101,7 +108,7 @@ DllTemplate<TYPE>::DllTemplate(const DllTemplate<TYPE>& otherList)
 	First = nullptr;
 	Count = 0;
 	clear();
-	
+
 	if (otherList.GetFirst() != nullptr) {
 		Node<TYPE>* currother = otherList.GetFirst();
 		while (currother != nullptr)
@@ -150,7 +157,7 @@ void DllTemplate<TYPE>::insertafter(Node<TYPE>* afterThis, TYPE value)
 {
 	//newNode.prev  : = node
 	Node<TYPE>* New = new Node<TYPE>(value);
-	
+
 	New->SetPrev(afterThis);
 	//	if node.next == null
 	if (afterThis->GetNext() == nullptr) {
@@ -247,7 +254,7 @@ TYPE DllTemplate<TYPE>::popFront()
 	if (this->GetFirst()->GetNext() != nullptr) {
 		this->GetFirst()->GetNext()->SetPrev(nullptr);
 	}
-	delete GetFirst();
+
 	this->SetFirst(Newfirst);
 	Count -= 1;
 	if (GetFirst() == nullptr)
@@ -256,6 +263,7 @@ TYPE DllTemplate<TYPE>::popFront()
 	}
 	std::cout << " popfront " << std::endl;
 	this->Print();
+
 	return Temp;
 }
 
@@ -267,7 +275,7 @@ TYPE DllTemplate<TYPE>::popBack()
 	if (this->GetFirst()->GetPrev() != nullptr) {
 		this->GetLast()->GetPrev()->SetNext(nullptr);
 	}
-	delete GetLast();
+	
 	this->SetLast(Newlast);
 	Count -= 1;
 	if (GetLast() == nullptr)
@@ -316,20 +324,28 @@ void DllTemplate<TYPE>::remove(TYPE value)
 }
 
 template <class TYPE>
-DllTemplate<TYPE> DllTemplate<TYPE>::operator=(const DllTemplate<TYPE>* otherList)
+DllTemplate<TYPE>& DllTemplate<TYPE>::operator=(const DllTemplate<TYPE>& otherList)
 {
 	if (this == &otherList)
 		return *this;
 	this->clear();
-	while (otherList->GetFirst()->GetNext() != nullptr)
-	{
+	if (otherList.GetFirst() != nullptr) {
 		Node<TYPE>* curr = new Node<TYPE>;
-		curr = otherList->GetFirst()->GetNext();
+
+		curr = otherList.GetFirst();
 		this->insertEnd(curr->GetValue());
-		otherList->GetFirst()->SetNext(curr->GetNext());
+
+		if (curr->GetNext() != nullptr) {
+			while (curr->GetNext() != nullptr)
+			{
+				curr = curr->GetNext();
+				this->insertEnd(curr->GetValue());
+				//otherList.GetFirst()->SetNext(curr->GetNext());
+			}
+		}
 	}
 	std::cout << " = operator " << std::endl;
-	this->Print;
+	this->Print();
 	return *this;
 }
 
@@ -347,8 +363,8 @@ void DllTemplate<TYPE>::pushBack(TYPE value)
 template <class TYPE>
 void DllTemplate<TYPE>::erase(Node<TYPE>* node)
 {
-	if (empty()) { return; }
-	while(this->find(node->GetValue()) != nullptr)
+	if (isempty()) { return; }
+	while (this->find(node->GetValue()) != nullptr)
 	{
 		this->remove(node->GetValue());
 	}
@@ -364,6 +380,12 @@ void DllTemplate<TYPE>::clear()
 	{
 		popFront();
 	}
+	this->SetLast(nullptr);
+	if (GetLast() != nullptr || GetFirst() != nullptr)
+	{
+		assert(GetFirst() != nullptr);
+	};
+
 	std::cout << " clear " << std::endl;
 	this->Print();
 }
@@ -388,12 +410,21 @@ void DllTemplate<TYPE>::Print()
 	}
 	Node<TYPE>* curr = new Node<TYPE>;
 	//Node<TYPE>* node = this->GetFirst();
-	curr = this->GetFirst();
-	while (curr->GetNext() != nullptr) 
+	if (this->GetFirst() == nullptr)
 	{
+		std::cout << std::endl;
+		return;
+	}
+	if (First == nullptr) { return; }
+	curr = this->GetFirst();
+	if (First == nullptr) { return; }
+	while (curr != nullptr)
+	{
+		
 		std::cout << curr->GetValue() << " " << std::endl;//node->GetValue() <<" " << std::endl;
+		if (curr->GetNext() == nullptr) { return; }
 		curr = curr->GetNext();
-	
+
 	}
 	std::cout << std::endl;
 }
