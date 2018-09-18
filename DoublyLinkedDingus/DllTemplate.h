@@ -78,29 +78,34 @@ DllTemplate<TYPE>::~DllTemplate()
 		return;
 	}//check its not empty or 1 size
 
-
-	if (First != nullptr) {
-		if (First->GetNext() != nullptr) {
-			auto a = First;//->GetNext();
-			auto b = a;
-			if (a->GetNext() != nullptr) {
-				while (a->GetNext() != nullptr) {
-					//store next
-					b = a->GetNext();
-					//delete current
-					if (a != nullptr)delete a;
-					//current set to next
-					if (a != nullptr)a = b;
-				}
-				if (b != nullptr) { delete b; }
-			}
-		}
+	Node<TYPE>* curr;
+	curr = First;
+	while(curr != nullptr)
+	{
+		Node<TYPE>* next = curr->GetNext();
+		delete curr;
+		curr = next;
 	}
-	std::cout << " destructor " << std::endl;
 
-	Print();
-	if (First != nullptr)delete First;
-	if (Last != nullptr)delete Last;
+
+	//if (First != nullptr) {
+	//	if (First->GetNext() != nullptr) {
+	//		Node<TYPE>* a = First;//->GetNext();
+	//		Node<TYPE>* b = a;
+	//		if (a->GetNext() != nullptr) {
+	//			while (a->GetNext() != nullptr) {
+	//				//store next
+	//				if (a->GetNext() != nullptr) { b = a->GetNext(); }
+	//				//delete current
+	//				if (a != nullptr)delete a;
+	//				//current set to next
+	//				if (a != nullptr)a = b;
+	//			}
+	//			if (b != nullptr) { delete b; }
+	//		}
+	//	}
+	//}
+	std::cout << " destructor " << std::endl;
 }
 
 template <class TYPE>
