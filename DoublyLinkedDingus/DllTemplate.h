@@ -86,25 +86,6 @@ DllTemplate<TYPE>::~DllTemplate()
 		delete curr;
 		curr = next;
 	}
-
-
-	//if (First != nullptr) {
-	//	if (First->GetNext() != nullptr) {
-	//		Node<TYPE>* a = First;//->GetNext();
-	//		Node<TYPE>* b = a;
-	//		if (a->GetNext() != nullptr) {
-	//			while (a->GetNext() != nullptr) {
-	//				//store next
-	//				if (a->GetNext() != nullptr) { b = a->GetNext(); }
-	//				//delete current
-	//				if (a != nullptr)delete a;
-	//				//current set to next
-	//				if (a != nullptr)a = b;
-	//			}
-	//			if (b != nullptr) { delete b; }
-	//		}
-	//	}
-	//}
 	std::cout << " destructor " << std::endl;
 }
 
@@ -290,14 +271,14 @@ TYPE DllTemplate<TYPE>::popBack()
 		SetFirst(nullptr);
 	}
 	std::cout << " popback " << std::endl;
-	this->Print;
+	this->Print();
 	return Temp;
 }
 
 template <class TYPE>
 void DllTemplate<TYPE>::remove(TYPE value)
 {
-	if (empty()) { return; }
+	if (isempty()) { return; }
 	//todo replace remove with find by value return pointer DONE I THINK
 	//function remove(DLLTemplate DllTemplate, Node node)
 	Node<TYPE>* Remove = this->find(value);//Node<TYPE>(value);
@@ -327,7 +308,7 @@ void DllTemplate<TYPE>::remove(TYPE value)
 		//			node.next.prev : = node.prev
 	}
 	std::cout << " remove " << std::endl;
-	this->Print;
+	this->Print();
 }
 
 template <class TYPE>
@@ -376,7 +357,7 @@ void DllTemplate<TYPE>::erase(Node<TYPE>* node)
 		this->remove(node->GetValue());
 	}
 	std::cout << " erase " << std::endl;
-	this->Print;
+	this->Print();
 }
 
 template <class TYPE>
