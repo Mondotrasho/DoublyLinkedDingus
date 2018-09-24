@@ -8,20 +8,20 @@ private:
 	Node<TYPE>* m_prev;
 	TYPE m_value;
 public:
-	
-	Node(TYPE value);
+
+	explicit Node(TYPE value);
 	Node();
 	~Node();
 	//Setters
-	void SetValue(TYPE value){ m_value = value; };
-	void SetNext(Node<TYPE>* next){ m_next = next; };
-	void SetPrev(Node<TYPE>* prev){	m_prev = prev;};
+	void set_value(TYPE value){ m_value = value; };
+	void set_next(Node<TYPE>* next){ m_next = next; };
+	void set_prev(Node<TYPE>* prev){	m_prev = prev;};
 	//Getters
-	TYPE GetValue() { return m_value; };
-	Node<TYPE>* GetNext()const { return m_next; };
-	Node<TYPE>*& GetNext() { return m_next; };
-	Node<TYPE>* GetPrev()const { return m_prev; };
-	Node<TYPE>*& GetPrev() { return m_prev; };
+	TYPE get_value() { return m_value; };
+	Node<TYPE>* get_next()const { return m_next; };
+	Node<TYPE>*& get_next() { return m_next; };
+	Node<TYPE>* get_prev()const { return m_prev; };
+	Node<TYPE>*& get_prev() { return m_prev; };
 };
 
 
@@ -52,4 +52,5 @@ Node<TYPE>::~Node()
 		 m_prev = nullptr;
 		//m_prev = NULL;
 	}
+	
 }
