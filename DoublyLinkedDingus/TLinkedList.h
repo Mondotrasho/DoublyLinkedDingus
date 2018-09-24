@@ -351,8 +351,8 @@ TLinkedList<TYPE>& TLinkedList<TYPE>::operator=(const TLinkedList<TYPE>& other_l
 				this->insert_end(curr->get_value());
 			}
 		}
-		delete curr;
-		curr = NULL;
+		//delete curr;
+		//curr = NULL;
 	}
 	std::cout << " = operator " << std::endl;
 	this->print();
