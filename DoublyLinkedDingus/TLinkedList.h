@@ -79,6 +79,12 @@ TLinkedList<TYPE>::~TLinkedList()
 			m_first = NULL;
 		}
 		std::cout << m_first << std::endl;
+//  	std::cout << m_last << std::endl;
+//  	if (m_last != nullptr) {
+//  		delete m_last;
+//  		m_last = NULL;
+//  	}
+//		std::cout << m_last << std::endl;
 		return;
 	}//check its not empty or 1 size
 
