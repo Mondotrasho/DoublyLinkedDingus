@@ -41,15 +41,4 @@ Node<TYPE>::Node(TYPE value)
 }
 template<class TYPE>
 Node<TYPE>::~Node()
-{
-	if (m_next != nullptr)
-	{
-		m_next =nullptr;
-		//m_next = NULL;
-	}
-	if (m_prev != nullptr)
-	{
-		m_prev = nullptr;
-		//m_prev = NULL;
-	}
-}
+{}
