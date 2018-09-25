@@ -13,10 +13,10 @@ public:
 	//con and des
 	TLinkedList();
 	~TLinkedList();
-	TLinkedList(const TLinkedList<TYPE>& otherList);
+	TLinkedList(const TLinkedList<TYPE>& other_list);
 
 	//operators
-	TLinkedList<TYPE>& operator=(const TLinkedList<TYPE>& otherList);
+	TLinkedList<TYPE>& operator=(const TLinkedList<TYPE>& other_list);
 
 	//various inserts
 	void push_front(TYPE value);
@@ -47,11 +47,11 @@ public:
 	Node<TYPE>* end() const { return nullptr; }
 	void set_last(Node<TYPE>* new_last) { m_last = new_last; }
 	void set_first(Node<TYPE>* new_first) { m_first = new_first; }
-	Node<TYPE>*& get_first() { return m_first; }
-	Node<TYPE>*& get_last() { return m_last; }
+	Node<TYPE>* get_first() { return m_first; }
+	Node<TYPE>* get_last() { return m_last; }
 	//overloads
-	Node<TYPE>* get_first() const { return m_first; }
-	Node<TYPE>* get_last() const { return m_last; }
+	const Node<TYPE>* get_first() const { return m_first; }
+	const Node<TYPE>* get_last() const { return m_last; }
 
 	//Utility
 	int get_count() const { return m_count; }
