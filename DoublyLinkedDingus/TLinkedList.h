@@ -188,10 +188,11 @@ void TLinkedList<TYPE>::insert_after(Node<TYPE>* after_this, TYPE value)
 template <class TYPE>
 void TLinkedList<TYPE>::insert_beginning(TYPE value)
 {
-	Node<TYPE>* new_node = new Node<TYPE>(value);
+	
 	//if TLinkedList.firstNode == null
 	if (this->get_first() == nullptr)
 	{
+		Node<TYPE>* new_node = new Node<TYPE>(value);
 		m_count += 1;
 		this->set_first(new_node);
 		this->set_last(new_node);
@@ -340,7 +341,7 @@ TLinkedList<TYPE>& TLinkedList<TYPE>::operator=(const TLinkedList<TYPE>& other_l
 	this->clear();
 	if (other_list.get_first() != nullptr) {
 		//todo mem leak? or handled by the destructors when the list is destroyed?
-		Node<TYPE>* curr = new Node<TYPE>;
+		Node<TYPE>* curr = nullptr;
 
 		curr = other_list.get_first();
 		this->insert_end(curr->get_value());
@@ -352,8 +353,6 @@ TLinkedList<TYPE>& TLinkedList<TYPE>::operator=(const TLinkedList<TYPE>& other_l
 				this->insert_end(curr->get_value());
 			}
 		}
-		delete curr;
-		curr = NULL;
 	}
 	std::cout << " = operator " << std::endl;
 	this->print();
@@ -410,7 +409,7 @@ void TLinkedList<TYPE>::print()
 		std::cout << " SHE EMPTY " << std::endl;
 		return;
 	}
-	Node<TYPE>* curr = new Node<TYPE>;
+	Node<TYPE>* curr = nullptr;
 
 	if (this->get_first() == nullptr)
 	{
@@ -429,7 +428,6 @@ void TLinkedList<TYPE>::print()
 		curr = curr->get_next();
 
 	}
-	delete curr;
-	curr = NULL;
+
 	std::cout << std::endl;
 }
