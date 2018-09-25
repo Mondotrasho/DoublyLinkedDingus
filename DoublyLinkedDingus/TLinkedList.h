@@ -30,8 +30,8 @@ public:
 	Node<TYPE>* find(TYPE value);
 
 	//removal
-	TYPE pop_front(); // – remove the first item​ return value
-	TYPE pop_back(); // – remove the last item​ return value
+	void pop_front(); // – remove the first item​ return value
+	void pop_back(); // – remove the last item​ return value
 	void erase(Node<TYPE>*); // – remove the node from the list​
 	void remove_all(TYPE value);// – erases all nodes where the value is equal​
 	void remove(TYPE value);  //single
@@ -79,12 +79,12 @@ TLinkedList<TYPE>::~TLinkedList()
 			m_first = NULL;
 		}
 		std::cout << m_first << std::endl;
-//  	std::cout << m_last << std::endl;
-//  	if (m_last != nullptr) {
-//  		delete m_last;
-//  		m_last = NULL;
-//  	}
-//		std::cout << m_last << std::endl;
+ // 	std::cout << m_last << std::endl;
+  //	if (m_last != nullptr) {
+ // 		delete m_last;
+ // 		m_last = NULL;
+ // 	}
+		std::cout << m_last << std::endl;
 		return;
 	}//check its not empty or 1 size
 
@@ -248,44 +248,38 @@ Node<TYPE>* TLinkedList<TYPE>::find(TYPE value)
 }
 
 template <class TYPE>
-TYPE TLinkedList<TYPE>::pop_front()
+void TLinkedList<TYPE>::pop_front()
 {
-	TYPE temp = this->get_first()->get_value();
-	auto new_first = this->get_first()->get_next();
+	auto N = get_first();
+
 	if (this->get_first()->get_next() != nullptr) {
-		this->get_first()->get_next()->set_prev(nullptr);
+		this->get_first()->get_next()->set_prev(this->get_first()->get_prev());
 	}
 
-	this->set_first(new_first);
-	m_count -= 1;
-	if (get_first() == nullptr)
-	{
-		set_last(nullptr);
-	}
+	this->set_first(this->get_first()->get_next());
+	
 	std::cout << " popfront " << std::endl;
 	this->print();
 
-	return temp;
+	delete N;
+	N = NULL;
 }
 
 template <class TYPE>
-TYPE TLinkedList<TYPE>::pop_back()
+void TLinkedList<TYPE>::pop_back()
 {
-	TYPE temp = this->get_last()->get_value();
-	auto new_last = this->get_last()->get_prev();
-	if (this->get_first()->get_prev() != nullptr) {
-		this->get_last()->get_prev()->set_next(nullptr);
+	auto N = this->get_last();
+	if (this->get_last()->get_prev() != nullptr) {
+		this->get_last()->get_prev()->set_next(this->get_last()->get_next());
 	}
 	
-	this->set_last(new_last);
-	m_count -= 1;
-	if (get_last() == nullptr)
-	{
-		set_first(nullptr);
-	}
+	this->set_last(this->get_last()->get_prev());
+
 	std::cout << " popback " << std::endl;
 	this->print();
-	return temp;
+
+	delete N;
+	N = NULL;
 }
 template <class TYPE>
 void TLinkedList<TYPE>::remove_all(TYPE value)
@@ -332,7 +326,8 @@ void TLinkedList<TYPE>::remove(TYPE value)
 		//			node.next.prev : = node.prev
 	}
 	m_count -= 1;
-	//delete remove;
+	delete remove;
+	remove = NULL;
 	std::cout << " remove " << std::endl;
 	this->print();
 }
@@ -357,8 +352,8 @@ TLinkedList<TYPE>& TLinkedList<TYPE>::operator=(const TLinkedList<TYPE>& other_l
 				this->insert_end(curr->get_value());
 			}
 		}
-		//delete curr;
-		//curr = NULL;
+		delete curr;
+		curr = NULL;
 	}
 	std::cout << " = operator " << std::endl;
 	this->print();

@@ -49,7 +49,7 @@ Node<TYPE>::~Node()
 	}
 	if (m_prev != nullptr)
 	{
-		 m_prev = nullptr;
+		m_prev = nullptr;
 		//m_prev = NULL;
 	}
 	
