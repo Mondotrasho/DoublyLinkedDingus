@@ -165,7 +165,7 @@ void TLinkedList<TYPE>::insert_after(Node<TYPE>* after_this, TYPE value)
 		m_count += 1;
 		new_node->set_next(nullptr);
 		after_this->set_next(new_node);
-		this->set_last(new_node);
+		set_last(new_node);
 		//		newNode.next : = null-- (not always necessary)
 		//		TLinkedList.lastNode : = newNode
 	}
@@ -182,7 +182,7 @@ void TLinkedList<TYPE>::insert_after(Node<TYPE>* after_this, TYPE value)
 		//		node.next : = newNode
 	}
 	std::cout << " insert_after " << std::endl;
-	this->print();
+	print();
 }
 
 template <class TYPE>
@@ -190,12 +190,12 @@ void TLinkedList<TYPE>::insert_beginning(TYPE value)
 {
 	
 	//if TLinkedList.firstNode == null
-	if (this->get_first() == nullptr)
+	if (get_first() == nullptr)
 	{
 		Node<TYPE>* new_node = new Node<TYPE>(value);
 		m_count += 1;
-		this->set_first(new_node);
-		this->set_last(new_node);
+		set_first(new_node);
+		set_last(new_node);
 		new_node->set_prev(nullptr);
 		new_node->set_next(nullptr);
 		//	TLinkedList.firstNode  : = newNode
@@ -206,24 +206,24 @@ void TLinkedList<TYPE>::insert_beginning(TYPE value)
 	//else
 	else
 	{
-		this->insert_before(this->get_first(), value);
+		insert_before(get_first(), value);
 	}
 	std::cout << " insert_beginning " << std::endl;
-	this->print();
+	print();
 }
 
 template <class TYPE>
 void TLinkedList<TYPE>::insert_end(TYPE value)
 {
 	//	if TLinkedList.lastNode == null
-	if (this->get_last() == nullptr)
+	if (get_last() == nullptr)
 	{
-		this->insert_beginning(value);
+		insert_beginning(value);
 	}
 	//	else
 	else
 	{
-		this->insert_after(this->get_last(), value);
+		insert_after(get_last(), value);
 	}
 
 }
@@ -232,7 +232,7 @@ template <class TYPE>
 Node<TYPE>* TLinkedList<TYPE>::find(TYPE value)
 {
 	//node  := TLinkedList.firstNode
-	auto node = this->get_first();
+	auto node = get_first();
 	//	while node ≠ null
 	while (node != nullptr)
 	{
@@ -253,14 +253,14 @@ void TLinkedList<TYPE>::pop_front()
 {
 	auto N = get_first();
 
-	if (this->get_first()->get_next() != nullptr) {
-		this->get_first()->get_next()->set_prev(this->get_first()->get_prev());
+	if (get_first()->get_next() != nullptr) {
+		get_first()->get_next()->set_prev(get_first()->get_prev());
 	}
 
-	this->set_first(this->get_first()->get_next());
+	set_first(get_first()->get_next());
 	
 	std::cout << " popfront " << std::endl;
-	this->print();
+	print();
 
 	delete N;
 	N = NULL;
@@ -269,15 +269,15 @@ void TLinkedList<TYPE>::pop_front()
 template <class TYPE>
 void TLinkedList<TYPE>::pop_back()
 {
-	auto N = this->get_last();
-	if (this->get_last()->get_prev() != nullptr) {
-		this->get_last()->get_prev()->set_next(this->get_last()->get_next());
+	auto N = get_last();
+	if (get_last()->get_prev() != nullptr) {
+		get_last()->get_prev()->set_next(get_last()->get_next());
 	}
 	
-	this->set_last(this->get_last()->get_prev());
+	set_last(get_last()->get_prev());
 
 	std::cout << " popback " << std::endl;
-	this->print();
+	print();
 
 	delete N;
 	N = NULL;
@@ -295,12 +295,12 @@ void TLinkedList<TYPE>::remove(TYPE value)
 {
 	if (is_empty()) { return; }
 	//function remove(DLLTemplate TLinkedList, Node node)
-	Node<TYPE>* remove = this->find(value);//Node<TYPE>(value);
+	Node<TYPE>* remove = find(value);//Node<TYPE>(value);
 	if (remove == nullptr) { return; }// not present
 	//	if node.prev == null
 	if (remove->get_prev() == nullptr)
 	{
-		this->set_first(remove->get_next());
+		set_first(remove->get_next());
 		
 		//		TLinkedList.firstNode  : = node.next
 	}
@@ -315,7 +315,7 @@ void TLinkedList<TYPE>::remove(TYPE value)
 	//		if node.next == null
 	if (remove->get_next() == nullptr)
 	{
-		this->set_last(remove->get_prev());
+		set_last(remove->get_prev());
 		
 		//			TLinkedList.lastNode : = node.prev
 	}
@@ -330,7 +330,7 @@ void TLinkedList<TYPE>::remove(TYPE value)
 	delete remove;
 	remove = NULL;
 	std::cout << " remove " << std::endl;
-	this->print();
+	print();
 }
 
 template <class TYPE>
@@ -338,24 +338,23 @@ TLinkedList<TYPE>& TLinkedList<TYPE>::operator=(const TLinkedList<TYPE>& other_l
 {
 	if (this == &other_list)
 		return *this;
-	this->clear();
+	clear();
 	if (other_list.get_first() != nullptr) {
-		//todo mem leak? or handled by the destructors when the list is destroyed?
 		Node<TYPE>* curr = nullptr;
 
 		curr = other_list.get_first();
-		this->insert_end(curr->get_value());
+		insert_end(curr->get_value());
 
 		if (curr->get_next() != nullptr) {
 			while (curr->get_next() != nullptr)
 			{
 				curr = curr->get_next();
-				this->insert_end(curr->get_value());
+				insert_end(curr->get_value());
 			}
 		}
 	}
 	std::cout << " = operator " << std::endl;
-	this->print();
+	print();
 
 	return *this;
 }
@@ -363,61 +362,61 @@ TLinkedList<TYPE>& TLinkedList<TYPE>::operator=(const TLinkedList<TYPE>& other_l
 template <class TYPE>
 void TLinkedList<TYPE>::push_front(TYPE value)
 {
-	this->insert_beginning(value);
+	insert_beginning(value);
 }
 
 template <class TYPE>
 void TLinkedList<TYPE>::push_back(TYPE value)
 {
-	this->insert_end(value);
+	insert_end(value);
 }
 template <class TYPE>
 void TLinkedList<TYPE>::erase(Node<TYPE>* node)
 {
 	if (is_empty()) { return; }
-	while (this->find(node->get_value()) != nullptr)
+	while (find(node->get_value()) != nullptr)
 	{
-		this->remove(node->get_value());
+		remove(node->get_value());
 	}
 	std::cout << " erase " << std::endl;
-	this->print();
+	print();
 }
 
 template <class TYPE>
 void TLinkedList<TYPE>::clear()
 {
-	if (this->is_empty()) { return; }
-	while (this->get_first() != nullptr)
+	if (is_empty()) { return; }
+	while (get_first() != nullptr)
 	{
 		pop_front();
 	}
-	this->set_last(nullptr);
+	set_last(nullptr);
 	if (get_last() != nullptr || get_first() != nullptr)
 	{
 		assert(get_first() != nullptr);
 	};
 
 	std::cout << " clear " << std::endl;
-	this->print();
+	print();
 }
 
 template <class TYPE>
 void TLinkedList<TYPE>::print()
 {
-	if (this->is_empty())
+	if (is_empty())
 	{
 		std::cout << " SHE EMPTY " << std::endl;
 		return;
 	}
 	Node<TYPE>* curr = nullptr;
 
-	if (this->get_first() == nullptr)
+	if (get_first() == nullptr)
 	{
 		std::cout << std::endl;
 		return;
 	}
 	if (m_first == nullptr) { return; }
-	curr = this->get_first();
+	curr = get_first();
 	if (m_first == nullptr) { return; }
 	while (curr != nullptr)
 	{
