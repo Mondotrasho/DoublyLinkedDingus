@@ -424,9 +424,12 @@ void TLinkedList<TYPE>::print()
 	{
 		
 		std::cout << curr->get_value() << " " << std::endl;
-		if (curr->get_next() == nullptr) { return; }
+		//uh oh
+		if (curr->get_next() == nullptr) { break; }
 		curr = curr->get_next();
 
 	}
+	delete curr;
+	curr = NULL;
 	std::cout << std::endl;
 }

@@ -52,5 +52,4 @@ Node<TYPE>::~Node()
 		m_prev = nullptr;
 		//m_prev = NULL;
 	}
-	
 }
